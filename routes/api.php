@@ -28,4 +28,6 @@ Route::get('/upload', function () {
 });
 
 Route::post('/upload-mandal-member', [MemberController::class, 'upoloadMandalUser']);
+Route::post('/upload-district-member', [MemberController::class, 'uploadDistrictUser']);
+Route::post('/upload-state-member', [MemberController::class, 'uploadStateUser']);
 

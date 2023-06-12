@@ -29,6 +29,7 @@ class Member extends Model
         'password',
         'mobile',
         'designation_id',
+        'designation_level_id',
         'district_id',
         'assembly_id',
         'mandal_id',
