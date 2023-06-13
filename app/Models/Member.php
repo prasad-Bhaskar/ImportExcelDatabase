@@ -26,7 +26,7 @@ class Member extends Model
         'last_name',
         'dob',
         'email',
-        'password',
+        'address',
         'mobile',
         'designation_id',
         'designation_level_id',
