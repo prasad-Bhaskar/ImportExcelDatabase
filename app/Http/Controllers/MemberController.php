@@ -298,7 +298,7 @@ class MemberController extends Controller
                 $memberAddress = $sheets->getCell("F{$i}")->getValue();
                 $districtName = $sheets->getCell("G{$i}")->getValue();
 
-                $designation = explode( ' ', $memberDesignation);
+                // $designation = explode( ' ', $memberDesignation);
                 $districtId = null;
                 $designationId = null;                
                 if($districtName != null)
@@ -312,16 +312,13 @@ class MemberController extends Controller
                 }
                
 
-               if(empty($designation))
-               {
-                $designationId = Designation::where('title', $designation[1])->value('id');
+                $designationId = Designation::where('title', trim($memberDesignation))->value('id');
 
                 if($designationId == null )
                 {
-                    return response()->json(['status' => 500, 'meaasge' => 'id dosent exists for district which name '. $designation[1]]);
+                    return response()->json(['status' => 500, 'meaasge' => 'id dosent exists for designation which name '. $memberDesignation .' sn '. $sn]);
                 } 
-                return response()->json(['status' => 500, 'meaasge' => 'id dosent exists for district which name '. $designation[1].' sn '. $sn]);
-               }
+                
 
                 if( $memberMobile != null)
                 {
@@ -334,6 +331,8 @@ class MemberController extends Controller
                             'first_name' =>  $MemberName,
                             'mobile' => $memberMobile,
                             'designation_id' => $designationId,
+                            'email' => ($memeberEmail !=null )? $memeberEmail: null,
+                            'address' => ($memberAddress !=null )? $memberAddress: null,
                             'designation_level_id' => '5a7ea632-9ca4-11ed-a3fb-0292b5d23722',
                             'district_id' => $districtId,
                             'created_at' => Carbon::now(),
