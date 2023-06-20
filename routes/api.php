@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MemberController;
-use App\Models\Category;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,10 @@ Route::get('/upload', function () {
     return response()->json(['category' => $category]);
 });
 
+Route::post('/upload-product', [ProductController::class, 'uploadProduct']);
+
 Route::post('/upload-mandal-member', [MemberController::class, 'upoloadMandalUser']);
 Route::post('/upload-district-member', [MemberController::class, 'uploadDistrictUser']);
 Route::post('/upload-state-member', [MemberController::class, 'uploadStateUser']);
+
 
