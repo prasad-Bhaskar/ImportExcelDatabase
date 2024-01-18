@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\StorageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,5 +34,6 @@ Route::post('/upload-product', [ProductController::class, 'uploadProduct']);
 Route::post('/upload-mandal-member', [MemberController::class, 'upoloadMandalUser']);
 Route::post('/upload-district-member', [MemberController::class, 'uploadDistrictUser']);
 Route::post('/upload-state-member', [MemberController::class, 'uploadStateUser']);
+Route::post('/upload-wallpaper', [StorageController::class, 'storeImageInS3']);
 
 
