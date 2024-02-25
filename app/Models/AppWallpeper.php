@@ -15,7 +15,8 @@ class AppWallpeper extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'wallpaper_path',   
+        'wallpaper_path', 
+        'thumbnail',  
         'created_at',
         'active'
     ];

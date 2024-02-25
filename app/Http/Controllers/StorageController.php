@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Faker\Provider\Image;
 use Illuminate\Support\Str;
 use App\Models\AppWallpeper;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class StorageController extends Controller
 {
     function storeImageInS3(Request $request){
-        // dd(phpinfo());
+        
         if($request->has('images')){
             foreach ($request->images as $image) {
 
@@ -26,13 +29,28 @@ class StorageController extends Controller
 
                 //filename to store
                 $filenametostore = $filename . '_' . time() . '.' . $extension;
+                $thumbnail = $filename . '_thumbnail' . time() . '.' . $extension;
                 $path = Storage::disk('s3')->put('wallpapers/' . $filenametostore, file_get_contents($image), 'public');
-            
-                $url ='https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/wallpapers/'.$filenametostore;
+
+                $url = 'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/wallpapers/'; 
+
+                // $newImage = Image::make($request->file('file'))->resize(160, 160);
+
+                $manager = new ImageManager(
+                    new Driver()
+                );
+                // dd($image->getClientOriginalName());
+                $newImage = $manager->read($image->getRealPath());
+                $newImage->resize(300,300);
+                Storage::disk('s3')->put('wallpapers/' . $thumbnail, (string)$newImage->encode(), 'public');
+                
+                $imageUrl =$url.$filenametostore;
+                $thumbnailUrl = $url.$thumbnail;
                  
                 AppWallpeper::create([
                     'id'=> Str::uuid(),
-                    'wallpaper_path'=>$url,
+                    'wallpaper_path'=>$imageUrl,
+                    'thumbnail'=>$thumbnailUrl,
                     'created_at'=>now()
                 ]);
                  
