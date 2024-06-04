@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Faker\Provider\Image;
 use Illuminate\Support\Str;
 use App\Models\AppWallpeper;
 use Illuminate\Http\Request;
+use Intervention\Image\Image;
+// use Intervention\Image\ImageManagerStatic as Image;
+
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -40,8 +42,12 @@ class StorageController extends Controller
                     new Driver()
                 );
                 // dd($image->getClientOriginalName());
-                $newImage = $manager->read($image->getRealPath());
-                $newImage->resize(300,300);
+                $newImage = $manager->read($image->getRealPath())->resize(500, 500);;
+                // $newImage->resize(200, 150);
+                // $newImage = Image::make($image)->resize();
+                // $newImage = Image;
+                // dd($newImage);
+
                 Storage::disk('s3')->put('wallpapers/' . $thumbnail, (string)$newImage->encode(), 'public');
                 
                 $imageUrl =$url.$filenametostore;
@@ -49,6 +55,7 @@ class StorageController extends Controller
                  
                 AppWallpeper::create([
                     'id'=> Str::uuid(),
+                    'name'=> $filename,
                     'wallpaper_path'=>$imageUrl,
                     'thumbnail'=>$thumbnailUrl,
                     'created_at'=>now()
